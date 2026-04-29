@@ -4,7 +4,7 @@
 
 Welcome to the comprehensive technical documentation for **ProjectEngine**, a full-stack hiring and project collaboration platform. This document covers architecture, database design, API reference, and system diagrams.
 
-### 📥 Download Original PDFs
+### Download Original PDFs
 <p align="center">
   <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank">
     <img src="Documentation.png" width="320" alt="Technical Documentation">
@@ -15,14 +15,14 @@ Welcome to the comprehensive technical documentation for **ProjectEngine**, a fu
   </a>
 </p>
 <p align="center">
-  <b><a href="../Documentation/ProjectEngine_Technical_Documentation.pdf">📄 Technical Documentation</a></b>
+  <b><a href="../Documentation/ProjectEngine_Technical_Documentation.pdf">Technical Documentation</a></b>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b><a href="../Documentation/ProjectEngine_Data_Dictionary.pdf">📄 Data Dictionary</a></b>
+  <b><a href="../Documentation/ProjectEngine_Data_Dictionary.pdf">Data Dictionary</a></b>
 </p>
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 1. [Executive Summary](#1-executive-summary)
 2. [Architecture & System Design](#2-architecture--system-design)
 3. [Data Dictionary & Database Schema](#3-data-dictionary--database-schema)
