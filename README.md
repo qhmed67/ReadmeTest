@@ -5,16 +5,9 @@
 Welcome to the comprehensive technical documentation for **ProjectEngine**, a full-stack hiring and project collaboration platform. This document covers architecture, database design, API reference, and system diagrams.
 
 ### Download Original PDFs
-<p align="center">
-  <a href="https://drive.google.com/file/d/1yGRA91eyGHGpXoG95AVKTy8WsNzXCgAT/view?usp=sharing" target="_blank" style="display: inline-block; text-align: center; margin-right: 30px; text-decoration: none;">
-    <img src="Documentation.png" width="320" alt="Technical Documentation"><br><br>
-    <b>Technical Documentation</b>
-  </a>
-  <a href="https://drive.google.com/file/d/1eXio_cuHRFpBjhJbxi54ySpPzI3S3wEL/view?usp=sharing" target="_blank" style="display: inline-block; text-align: center; text-decoration: none;">
-    <img src="Data Dicitionary.png" width="320" alt="Data Dictionary"><br><br>
-    <b>Data Dictionary</b>
-  </a>
-</p>
+| <a href="https://drive.google.com/file/d/1yGRA91eyGHGpXoG95AVKTy8WsNzXCgAT/view?usp=sharing" target="_blank"><img src="Documentation.png" width="350" alt="Technical Documentation"></a> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <a href="https://drive.google.com/file/d/1eXio_cuHRFpBjhJbxi54ySpPzI3S3wEL/view?usp=sharing" target="_blank"><img src="Data Dicitionary.png" width="350" alt="Data Dictionary"></a> |
+| :---: | :---: | :---: |
+| **[Technical Documentation](https://drive.google.com/file/d/1yGRA91eyGHGpXoG95AVKTy8WsNzXCgAT/view?usp=sharing)** | | **[Data Dictionary](https://drive.google.com/file/d/1eXio_cuHRFpBjhJbxi54ySpPzI3S3wEL/view?usp=sharing)** |
 
 ---
 
@@ -174,3 +167,4 @@ erDiagram
 3. Execute `database/schema.sql` in SQL Server Management Studio.
 4. Update `api/db_connect.php` with your `.\SQLEXPRESS01` credentials.
 5. Launch via `http://localhost/ProjectEngine/index.html`.
+
