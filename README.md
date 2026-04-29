@@ -1,19 +1,93 @@
-# System Diagrams
+# ProjectEngine Technical Documentation
 
-This file contains all the academic system models for ProjectEngine. You can use a Markdown previewer (like the built-in VS Code preview or GitHub) to view the rendered diagrams.
+![Version](https://img.shields.io/badge/Version-1.0-blue) ![Date](https://img.shields.io/badge/Date-April_2026-lightgrey) ![Stack](https://img.shields.io/badge/Stack-PHP_|_SQL_Server_|_Vanilla_JS-red)
+
+Welcome to the comprehensive technical documentation for **ProjectEngine**, a full-stack hiring and project collaboration platform. This document covers architecture, database design, API reference, and system diagrams.
 
 ---
 
-## 1. Context Diagram
-The Context Diagram represents the entire system as a single black-box process, demonstrating how external entities (Clients and Developers) interact with the system at the highest level.
+## 📑 Table of Contents
+1. [Executive Summary](#1-executive-summary)
+2. [Architecture & System Design](#2-architecture--system-design)
+3. [Data Dictionary & Database Schema](#3-data-dictionary--database-schema)
+4. [System Diagrams](#4-system-diagrams)
+5. [Security Considerations](#5-security-considerations)
+6. [Setup & Installation](#6-setup--installation)
 
-*(Note: In traditional systems analysis, the Context Diagram and DFD Level 0 are often synonymous. This represents the absolute highest-level view).*
+---
+
+## 1. Executive Summary
+ProjectEngine is designed to facilitate the connection between clients who need software projects built and developers who possess the technical skills to build them. The platform serves as a dedicated technical hiring ecosystem, providing role-based authentication, developer discovery with skill-level filtering, complete project lifecycle management, an interactive Kanban-style workspace, and real-time messaging.
+
+**Key Highlights:**
+- **Dual Hiring Pathways:** Clients can hire developers directly, or developers can apply to open projects.
+- **Three-Tier Architecture:** Vanilla HTML/CSS/JS frontend, PHP REST API backend, Microsoft SQL Server database.
+- **Framework-less:** Built entirely without heavy frontend frameworks or ORMs for maximum portability and fundamental skill demonstration.
+
+---
+
+## 2. Architecture & System Design
+
+### 2.1 Three-Tier Architecture
+The platform cleanly separates presentation, business logic, and data persistence.
+
+| Tier | Components | State Management | Communication |
+|---|---|---|---|
+| **Presentation** | HTML pages, `style.css`, `script.js` | `localStorage` (isLoggedIn, userRole) | `fetch()` API / JSON |
+| **Application** | 20 PHP REST endpoints | `$_SESSION` superglobal | Parameterized SQL |
+| **Data** | SQL Server (ProjectEngineDB) | ACID compliance | CHECK constraints |
+
+### 2.2 Data Flow Patterns (Fetch API)
+All frontend-to-backend communication follows a consistent pattern using the Fetch API. Read operations use `GET`, while write operations use `POST` with `FormData`. Error handling follows HTTP status code conventions (401 Auth, 404 Missing, 409 Conflict).
+
+---
+
+## 3. Data Dictionary & Database Schema
+
+The database consists of nine tables organized around a central `Users` supertype with `Clients` and `Developers` as role-specific subtypes, following the ISA (Inheritance) pattern.
+
+### 3.1 Users (ISA Supertype)
+Stores central identity records for all registered users.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `user_id` | INT IDENTITY | **PK** | Auto-generated unique identifier |
+| `email` | VARCHAR(255) | **UK**, NOT NULL | User email address (login) |
+| `password_hash` | VARCHAR(255) | NOT NULL | bcrypt-hashed password |
+| `role` | VARCHAR(20) | CHECK (Client, Developer) | Access permissions role |
+
+### 3.2 Developers (ISA Subtype)
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `dev_id` | INT | **PK, FK** (Users) | Shared primary key (ISA pattern) |
+| `level` | VARCHAR(20) | CHECK (Trainee, Junior, Mid, Senior) | Experience tier |
+| `is_booked` | BIT | DEFAULT 0 | Availability flag (0=Available) |
+
+### 3.3 Projects
+The central entity for core business logic and project lifecycle.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `project_id` | INT IDENTITY | **PK** | Auto-generated project ID |
+| `client_id` | INT | **FK** (Clients) ON DELETE CASCADE | Owning client reference |
+| `status` | VARCHAR(20) | CHECK (Pending, Active, Completed) | Project lifecycle status |
+
+*(For full tables including Skills, Workspace_Messages, and Tasks, refer to the Database Reference Document).*
+
+---
+
+## 4. System Diagrams
+
+This section visually maps the technical text above into academic models.
+
+### 4.1 Context Diagram (DFD Level 0)
+Treats the entire platform as a single process interacting with external entities.
 
 ```mermaid
 flowchart LR
     Client[Client]
     Dev[Developer]
-    Sys((ProjectEngine\nSystem))
+    Sys((ProjectEngine\nPlatform))
 
     Client -- "Credentials, Project Postings, Chat" --> Sys
     Sys -- "Developer Profiles, Dashboard Stats" --> Client
@@ -22,56 +96,32 @@ flowchart LR
     Sys -- "Job Listings, Workspaces" --> Dev
 ```
 
----
-
-## 2. ERD (Chen's Notation)
-Chen's notation emphasizes Entities (rectangles) and Relationships (diamonds). Attributes (ovals) are simplified here for readability. 
+### 4.2 ERD (Chen's Notation)
+Visualizes entities and relationships using academic notation (Diamonds = Relationships).
 
 ```mermaid
 flowchart TD
-    %% Entities (Rectangles)
     U[Users]
     C[Clients]
     D[Developers]
     P[Projects]
     S[Skills]
-    M[Workspace_Messages]
-    T[Workspace_Tasks]
 
-    %% Relationships (Diamonds)
     IsA1{Is A}
     IsA2{Is A}
     Posts{Posts}
-    Applies{Applies to}
-    HasSkill{Has Skill}
-    HasMsg{Contains}
-    HasTask{Tracks}
+    Applies{Applies}
+    Has{Has Skill}
 
-    %% Connect Entities to Relationships
     U ---|1| IsA1 ---|0..1| C
     U ---|1| IsA2 ---|0..1| D
-    
     C ---|1| Posts ---|N| P
     D ---|1| Applies ---|N| P
-    D ---|M| HasSkill ---|N| S
-    
-    P ---|1| HasMsg ---|N| M
-    U ---|1| HasMsg
-    
-    P ---|1| HasTask ---|N| T
-
-    %% Key Attributes (Ovals)
-    u_id([user_id]) --- U
-    c_id([client_id]) --- C
-    d_id([dev_id]) --- D
-    p_id([project_id]) --- P
-    s_id([skill_name]) --- S
+    D ---|M| Has ---|N| S
 ```
 
----
-
-## 3. ERD (Database Schema)
-This is the physical database schema using standard Crow's Foot notation. It maps exactly to the SQL Server database, showing primary keys (PK), foreign keys (FK), and column data types.
+### 4.3 ERD (Schema Crow's Foot)
+Maps the exact physical SQL database structure.
 
 ```mermaid
 erDiagram
@@ -85,117 +135,30 @@ erDiagram
     Projects ||--o{ Workspace_Messages : "contains"
     Users ||--o{ Workspace_Messages : "sends"
     Projects ||--o{ Workspace_Tasks : "tracks"
-
-    Users {
-        int user_id PK
-        nvarchar email UK
-        nvarchar password_hash
-        nvarchar role
-    }
-    Clients {
-        int client_id PK,FK
-        nvarchar company_name
-    }
-    Developers {
-        int dev_id PK,FK
-        nvarchar full_name
-        nvarchar level
-        bit is_booked
-    }
-    Skills {
-        int skill_id PK
-        nvarchar skill_name UK
-    }
-    Developer_Skills {
-        int dev_id PK,FK
-        int skill_id PK,FK
-    }
-    Projects {
-        int project_id PK
-        int client_id FK
-        nvarchar title
-        nvarchar status
-    }
-    Project_Applications {
-        int application_id PK
-        int project_id FK
-        int dev_id FK
-        nvarchar status
-    }
-    Workspace_Messages {
-        int message_id PK
-        int project_id FK
-        int sender_user_id FK
-        nvarchar message_body
-    }
-    Workspace_Tasks {
-        int task_id PK
-        int project_id FK
-        nvarchar title
-        nvarchar status
-    }
 ```
 
 ---
 
-## 4. DFD Level 0
-The Data Flow Diagram Level 0 breaks the Context Diagram open slightly to show data stores at a very high level, maintaining the single main process.
+## 5. Security Considerations
 
-```mermaid
-flowchart LR
-    Client[Client]
-    Dev[Developer]
-    
-    Sys((0.0 ProjectEngine Platform))
-    
-    DB[(Main Database)]
+### 5.1 Implemented Measures
+1. **Password Hashing:** `PASSWORD_BCRYPT` with automatic salt generation.
+2. **SQL Injection Prevention:** 100% usage of parameterized statements via `sqlsrv`.
+3. **Data Integrity:** `CHECK` constraints on all enum strings (`status`, `role`, `level`) preventing bad data at the database level.
 
-    Client -- "Account Info, Project Details, Messages" --> Sys
-    Sys -- "Dashboard Views, Dev Profiles, Workspace State" --> Client
-
-    Dev -- "Profile Data, Applications, Task Updates" --> Sys
-    Sys -- "Job Listings, Hire Approvals, Workspace State" --> Dev
-    
-    Sys <--> |"SQL Read/Write"| DB
-```
+### 5.2 Identified Gaps (Future Roadmap)
+| Issue | Severity | Recommended Mitigation |
+|---|---|---|
+| **No CSRF Protection** | High | Implement anti-CSRF tokens in all POST forms |
+| **XSS via innerHTML** | High | Replace `innerHTML` with `textContent` or sanitize output |
+| **No Rate Limiting** | High | Add exponential backoff to the login endpoint |
 
 ---
 
-## 5. DFD Level 1
-Level 1 Process Decomposition breaks the main system down into its core subsystems (Processes 1.0, 2.0, 3.0) and shows how they route data to specific logical Data Stores.
+## 6. Setup & Installation
 
-```mermaid
-flowchart TB
-    %% External Entities
-    C[Client]
-    D[Developer]
-
-    %% Processes
-    P1((1.0 Manage Identity))
-    P2((2.0 Manage Projects))
-    P3((3.0 Workspace Sync))
-
-    %% Data Stores
-    D1[(D1: Auth & Profiles)]
-    D2[(D2: Projects & Apps)]
-    D3[(D3: Tasks & Chat)]
-
-    %% Entity to Process Flows
-    C -- "Login / Profile Updates" --> P1
-    C -- "Post Project / Review Apps" --> P2
-    C -- "Read Tasks / Send Chat" --> P3
-
-    D -- "Login / Skill Updates" --> P1
-    D -- "Apply to Project" --> P2
-    D -- "Move Tasks / Send Chat" --> P3
-
-    %% Process to Data Store Flows
-    P1 <--> |"Verify / Save Users"| D1
-    P2 <--> |"Save / Read Projects"| D2
-    P3 <--> |"Save / Read Board"| D3
-
-    %% Cross-Process Communication
-    P1 -. "Auth Token" .-> P2
-    P1 -. "Auth Token" .-> P3
-    P2 -. "Active Project Auth" .-> P3
-```
+1. Install **XAMPP** (PHP 8.x) and **SQL Server 2019 Express**.
+2. Install the **PHP sqlsrv extension** (ODBC Driver 17).
+3. Execute `database/schema.sql` in SQL Server Management Studio.
+4. Update `api/db_connect.php` with your `.\SQLEXPRESS01` credentials.
+5. Launch via `http://localhost/ProjectEngine/index.html`.
