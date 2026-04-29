@@ -5,17 +5,9 @@
 Welcome to the comprehensive technical documentation for **ProjectEngine**, a full-stack hiring and project collaboration platform. This document covers architecture, database design, API reference, and system diagrams.
 
 ### 📥 Download Original PDFs
-<div align="center" style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
-  <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank">
-    <img src="../Documentation.png" width="250" alt="Technical Documentation" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
-    <h4 style="margin-top: 15px;">📄 Technical Documentation</h4>
-  </a>
-
-  <a href="../Documentation/ProjectEngine_Data_Dictionary.pdf" target="_blank">
-    <img src="../Data Dicitionary.png" width="250" alt="Data Dictionary" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
-    <h4 style="margin-top: 15px;">📄 Data Dictionary</h4>
-  </a>
-</div>
+| <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank"><img src="Documentation.png" width="250" alt="Technical Documentation"></a> | <a href="../Documentation/ProjectEngine_Data_Dictionary.pdf" target="_blank"><img src="Data Dicitionary.png" width="250" alt="Data Dictionary"></a> |
+|:---:|:---:|
+| **[📄 Technical Documentation](../Documentation/ProjectEngine_Technical_Documentation.pdf)** | **[📄 Data Dictionary](../Documentation/ProjectEngine_Data_Dictionary.pdf)** |
 
 ---
 
