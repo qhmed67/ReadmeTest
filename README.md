@@ -6,18 +6,14 @@ Welcome to the comprehensive technical documentation for **ProjectEngine**, a fu
 
 ### Download Original PDFs
 <p align="center">
-  <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank">
-    <img src="Documentation.png" width="320" alt="Technical Documentation">
+  <a href="https://drive.google.com/file/d/1yGRA91eyGHGpXoG95AVKTy8WsNzXCgAT/view?usp=sharing" target="_blank" style="display: inline-block; text-align: center; margin-right: 30px; text-decoration: none;">
+    <img src="Documentation.png" width="320" alt="Technical Documentation"><br><br>
+    <b>Technical Documentation</b>
   </a>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="../Documentation/ProjectEngine_Data_Dictionary.pdf" target="_blank">
-    <img src="Data Dicitionary.png" width="320" alt="Data Dictionary">
+  <a href="https://drive.google.com/file/d/1eXio_cuHRFpBjhJbxi54ySpPzI3S3wEL/view?usp=sharing" target="_blank" style="display: inline-block; text-align: center; text-decoration: none;">
+    <img src="Data Dicitionary.png" width="320" alt="Data Dictionary"><br><br>
+    <b>Data Dictionary</b>
   </a>
-</p>
-<p align="center">
-  <b><a href="../Documentation/ProjectEngine_Technical_Documentation.pdf">Technical Documentation</a></b>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b><a href="../Documentation/ProjectEngine_Data_Dictionary.pdf">Data Dictionary</a></b>
 </p>
 
 ---
