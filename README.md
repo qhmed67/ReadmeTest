@@ -167,4 +167,3 @@ erDiagram
 3. Execute `database/schema.sql` in SQL Server Management Studio.
 4. Update `api/db_connect.php` with your `.\SQLEXPRESS01` credentials.
 5. Launch via `http://localhost/ProjectEngine/index.html`.
-
