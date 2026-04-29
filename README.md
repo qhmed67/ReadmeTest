@@ -1,149 +1,140 @@
-<div align="center">
+# ProjectEngine Technical Documentation
 
-# ProjectEngine
+![Version](https://img.shields.io/badge/Version-1.0-blue) ![Date](https://img.shields.io/badge/Date-April_2026-lightgrey) ![Stack](https://img.shields.io/badge/Stack-PHP_|_SQL_Server_|_Vanilla_JS-red)
 
-**A Technical Hiring & Project Collaboration Platform**
+Welcome to the comprehensive technical documentation for **ProjectEngine**, a full-stack hiring and project collaboration platform. This document covers architecture, database design, API reference, and system diagrams.
 
-[![SQL Server](https://img.shields.io/badge/SQL_Server-2019+-CC2927?style=flat-square&logo=microsoft-sql-server&logoColor=white)](https://www.microsoft.com/en-us/sql-server)
-[![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+### 📥 Download Original PDFs
+<div align="center" style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
+  <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank">
+    <img src="../Documentation/tech-doc-cover.png" width="250" alt="Technical Documentation" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+    <h4 style="margin-top: 15px;">📄 Technical Documentation</h4>
+  </a>
 
-ProjectEngine bridges the gap between **Clients** who need software built and **Developers** who build it. Post a project, find the right talent by skill and seniority level, and collaborate in a real-time workspace — all from a single platform.
-
+  <a href="../Documentation/ProjectEngine_Data_Dictionary.pdf" target="_blank">
+    <img src="../Documentation/data-dict-cover.png" width="250" alt="Data Dictionary" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+    <h4 style="margin-top: 15px;">📄 Data Dictionary</h4>
+  </a>
 </div>
 
 ---
 
-## Table of Contents
-
-- [Executive Summary](#executive-summary)
-- [System Architecture](#system-architecture)
-- [Database Schema (ERD)](#database-schema-erd)
-- [UI Showcase: Client vs Developer](#ui-showcase-client-vs-developer)
-- [Tech Stack](#tech-stack)
-- [Installation & Setup](#installation--setup)
-- [API Reference](#api-reference)
-- [Project Structure](#project-structure)
+## 📑 Table of Contents
+1. [Executive Summary](#1-executive-summary)
+2. [Architecture & System Design](#2-architecture--system-design)
+3. [Data Dictionary & Database Schema](#3-data-dictionary--database-schema)
+4. [System Diagrams](#4-system-diagrams)
+5. [Security Considerations](#5-security-considerations)
+6. [Setup & Installation](#6-setup--installation)
 
 ---
 
-## Executive Summary
+## 1. Executive Summary
+ProjectEngine is designed to facilitate the connection between clients who need software projects built and developers who possess the technical skills to build them. The platform serves as a dedicated technical hiring ecosystem, providing role-based authentication, developer discovery with skill-level filtering, complete project lifecycle management, an interactive Kanban-style workspace, and real-time messaging.
 
-### The Problem
-
-Freelancing marketplaces are bloated. They overwhelm clients with thousands of generic profiles and force developers through complex bidding wars. For small-to-mid scale project work — university capstones, startup MVPs, or internal tooling — teams need a **focused, lightweight** platform that cuts straight to collaboration.
-
-### The Solution
-
-ProjectEngine is a purpose-built hiring portal with an integrated workspace. It provides:
-
-| Feature | Description |
-|---|---|
-| **Role-Based Auth** | Separate registration flows for Clients and Developers with bcrypt-hashed credentials and PHP session management. |
-| **Tiered Developer Discovery** | Developers are classified into 4 seniority levels (Trainee → Senior) with skill tags, hourly rates, and portfolio links. Clients filter and hire directly. |
-| **Project Lifecycle Management** | Projects flow through `Pending → Active → Completed`. Applications are tracked, accepted, or rejected — with automatic state transitions. |
-| **Real-Time Workspace** | Once a developer is hired, both parties enter a shared workspace with a Kanban task board (To Do / In Progress / Done) and a persistent chat channel. |
-| **Profile Settings & Account Control** | Users can update their profiles and delete their accounts (with password verification and active-project safety checks). |
-
-### Target Audience
-
-- **Students & Trainees** looking for real-world project experience.
-- **Startup Founders** seeking affordable development talent.
-- **Mid-Senior Developers** managing their freelance pipeline.
+**Key Highlights:**
+- **Dual Hiring Pathways:** Clients can hire developers directly, or developers can apply to open projects.
+- **Three-Tier Architecture:** Vanilla HTML/CSS/JS frontend, PHP REST API backend, Microsoft SQL Server database.
+- **Framework-less:** Built entirely without heavy frontend frameworks or ORMs for maximum portability and fundamental skill demonstration.
 
 ---
 
-## System Architecture
+## 2. Architecture & System Design
 
-The platform follows a classic **3-tier architecture**: a static HTML/CSS/JS frontend communicates with a PHP API layer, which manages state in a normalized SQL Server database.
+### 2.1 Three-Tier Architecture
+The platform cleanly separates presentation, business logic, and data persistence.
 
-```mermaid
-flowchart TB
-    subgraph Frontend ["Frontend (Browser)"]
-        UI["HTML Views (dashboard, workspace, etc)"]
-        JS["script.js (DOM Logic & State)"]
-        UI <-->|"User Events / DOM Updates"| JS
-    end
+| Tier | Components | State Management | Communication |
+|---|---|---|---|
+| **Presentation** | HTML pages, `style.css`, `script.js` | `localStorage` (isLoggedIn, userRole) | `fetch()` API / JSON |
+| **Application** | 20 PHP REST endpoints | `$_SESSION` superglobal | Parameterized SQL |
+| **Data** | SQL Server (ProjectEngineDB) | ACID compliance | CHECK constraints |
 
-    subgraph API ["API Layer (PHP)"]
-        Auth["Auth APIs (login, register)"]
-        Proj["Project APIs (post, apply, hire)"]
-        Work["Workspace APIs (tasks, chat)"]
-        Prof["Profile APIs (get, update)"]
-    end
+### 2.2 Data Flow Patterns (Fetch API)
+All frontend-to-backend communication follows a consistent pattern using the Fetch API. Read operations use `GET`, while write operations use `POST` with `FormData`. Error handling follows HTTP status code conventions (401 Auth, 404 Missing, 409 Conflict).
 
-    subgraph DB ["Database (SQL Server)"]
-        Tables[("9 Normalized Tables")]
-    end
+---
 
-    JS <-->|"fetch() JSON"| Auth & Proj & Work & Prof
-    Auth & Proj & Work & Prof <-->|"sqlsrv_query()"| Tables
-```
+## 3. Data Dictionary & Database Schema
 
-### Data Flow Diagrams (DFD)
+The database consists of nine tables organized around a central `Users` supertype with `Clients` and `Developers` as role-specific subtypes, following the ISA (Inheritance) pattern.
 
-Data Flow Diagrams illustrate how information routes through the system's processes and databases. This is vital for understanding system boundaries and data persistence.
+### 3.1 Users (ISA Supertype)
+Stores central identity records for all registered users.
 
-#### DFD Level 0 (Context Diagram)
-The Context Diagram treats the entire platform as a single process, showing the primary inputs and outputs from our external entities.
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `user_id` | INT IDENTITY | **PK** | Auto-generated unique identifier |
+| `email` | VARCHAR(255) | **UK**, NOT NULL | User email address (login) |
+| `password_hash` | VARCHAR(255) | NOT NULL | bcrypt-hashed password |
+| `role` | VARCHAR(20) | CHECK (Client, Developer) | Access permissions role |
+
+### 3.2 Developers (ISA Subtype)
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `dev_id` | INT | **PK, FK** (Users) | Shared primary key (ISA pattern) |
+| `level` | VARCHAR(20) | CHECK (Trainee, Junior, Mid, Senior) | Experience tier |
+| `is_booked` | BIT | DEFAULT 0 | Availability flag (0=Available) |
+
+### 3.3 Projects
+The central entity for core business logic and project lifecycle.
+
+| Column | Type | Constraints | Description |
+|---|---|---|---|
+| `project_id` | INT IDENTITY | **PK** | Auto-generated project ID |
+| `client_id` | INT | **FK** (Clients) ON DELETE CASCADE | Owning client reference |
+| `status` | VARCHAR(20) | CHECK (Pending, Active, Completed) | Project lifecycle status |
+
+*(For full tables including Skills, Workspace_Messages, and Tasks, refer to the Database Reference Document).*
+
+---
+
+## 4. System Diagrams
+
+This section visually maps the technical text above into academic models.
+
+### 4.1 Context Diagram (DFD Level 0)
+Treats the entire platform as a single process interacting with external entities.
 
 ```mermaid
 flowchart LR
     Client[Client]
     Dev[Developer]
-    Sys((0.0 ProjectEngine Platform))
+    Sys((ProjectEngine\nPlatform))
 
-    Client -- "Account Info, Project Details, Messages" --> Sys
-    Sys -- "Dashboard Views, Dev Profiles, Workspace State" --> Client
+    Client -- "Credentials, Project Postings, Chat" --> Sys
+    Sys -- "Developer Profiles, Dashboard Stats" --> Client
 
-    Dev -- "Profile Data, Applications, Task Updates" --> Sys
-    Sys -- "Job Listings, Hire Approvals, Workspace State" --> Dev
+    Dev -- "Credentials, Skills, Applications" --> Sys
+    Sys -- "Job Listings, Workspaces" --> Dev
 ```
 
-#### DFD Level 1 (Process Decomposition)
-Level 1 breaks the main system down into its core subsystems (Identity, Projects, Workspace) and shows how they interact with specific database tables.
+### 4.2 ERD (Chen's Notation)
+Visualizes entities and relationships using academic notation (Diamonds = Relationships).
 
 ```mermaid
-flowchart TB
-    %% External Entities
-    C[Client]
-    D[Developer]
+flowchart TD
+    U[Users]
+    C[Clients]
+    D[Developers]
+    P[Projects]
+    S[Skills]
 
-    %% Processes
-    P1((1.0 Manage Identity))
-    P2((2.0 Manage Projects))
-    P3((3.0 Workspace Sync))
+    IsA1{Is A}
+    IsA2{Is A}
+    Posts{Posts}
+    Applies{Applies}
+    Has{Has Skill}
 
-    %% Data Stores
-    D1[(D1: Auth & Profiles)]
-    D2[(D2: Projects & Apps)]
-    D3[(D3: Tasks & Chat)]
-
-    %% Entity to Process Flows
-    C -- "Login / Profile Updates" --> P1
-    C -- "Post Project / Review Apps" --> P2
-    C -- "Read Tasks / Send Chat" --> P3
-
-    D -- "Login / Skill Updates" --> P1
-    D -- "Apply to Project" --> P2
-    D -- "Move Tasks / Send Chat" --> P3
-
-    %% Process to Data Store Flows
-    P1 <--> |"Verify / Save Users"| D1
-    P2 <--> |"Save / Read Projects"| D2
-    P3 <--> |"Save / Read Board"| D3
-
-    %% Cross-Process Communication
-    P1 -. "Auth Token" .-> P2
-    P1 -. "Auth Token" .-> P3
-    P2 -. "Active Project Auth" .-> P3
+    U ---|1| IsA1 ---|0..1| C
+    U ---|1| IsA2 ---|0..1| D
+    C ---|1| Posts ---|N| P
+    D ---|1| Applies ---|N| P
+    D ---|M| Has ---|N| S
 ```
 
----
-
-## Database Schema (ERD)
-
-The database uses **9 normalized tables** with enforced referential integrity. Users is the central identity table; Clients and Developers are ISA subtypes linked via shared primary keys.
+### 4.3 ERD (Schema Crow's Foot)
+Maps the exact physical SQL database structure.
 
 ```mermaid
 erDiagram
@@ -157,260 +148,30 @@ erDiagram
     Projects ||--o{ Workspace_Messages : "contains"
     Users ||--o{ Workspace_Messages : "sends"
     Projects ||--o{ Workspace_Tasks : "tracks"
-
-    Users {
-        int user_id PK
-        nvarchar email UK
-        nvarchar password_hash
-        nvarchar role "Client | Developer"
-        datetime created_at
-    }
-
-    Clients {
-        int client_id PK,FK
-        nvarchar company_name
-        nvarchar contact_number
-    }
-
-    Developers {
-        int dev_id PK,FK
-        nvarchar full_name
-        nvarchar level "Trainee|Junior|Mid|Senior"
-        decimal hourly_rate
-        nvarchar job_title
-        nvarchar github_url
-        nvarchar linkedin_url
-        nvarchar portfolio_url
-        nvarchar bio
-        bit is_booked
-    }
-
-    Skills {
-        int skill_id PK
-        nvarchar skill_name UK
-    }
-
-    Developer_Skills {
-        int dev_id PK,FK
-        int skill_id PK,FK
-    }
-
-    Projects {
-        int project_id PK
-        int client_id FK
-        nvarchar title
-        nvarchar description
-        nvarchar budget_tier
-        nvarchar required_level
-        nvarchar status "Pending|Active|Completed"
-    }
-
-    Project_Applications {
-        int application_id PK
-        int project_id FK
-        int dev_id FK
-        nvarchar status "Applied|Accepted|Rejected"
-        datetime applied_at
-    }
-
-    Workspace_Messages {
-        int message_id PK
-        int project_id FK
-        int sender_user_id FK
-        nvarchar message_body
-        datetime sent_at
-    }
-
-    Workspace_Tasks {
-        int task_id PK
-        int project_id FK
-        nvarchar title
-        nvarchar description
-        nvarchar status "To Do|In Progress|Done"
-        datetime created_at
-        datetime updated_at
-    }
 ```
 
-### Key Design Decisions
-
-| Decision | Rationale |
-|---|---|
-| **ISA Pattern** (Users → Clients/Developers) | Avoids nullable columns. Each role gets its own profile table with role-specific fields. The shared PK guarantees a 1:1 mapping. |
-| **ON DELETE CASCADE** from Users | Deleting a user automatically cleans up their Client/Developer profile, skills, and project ownership chain. |
-| **ON DELETE NO ACTION** on `Project_Applications.dev_id` | Prevents cascade loops. A developer deletion must be handled explicitly (reject active apps first). |
-| **CHECK constraints on enums** | `role`, `level`, `status` — all enforced at the database level so no invalid state can ever reach disk, regardless of API bugs. |
-| **Composite PK on Developer_Skills** | Natural key (dev_id + skill_id) prevents duplicates without needing a surrogate ID. |
-
 ---
 
-## UI Showcase: Client vs Developer
+## 5. Security Considerations
 
-ProjectEngine renders distinct experiences based on the authenticated user's role. Below is a side-by-side comparison.
+### 5.1 Implemented Measures
+1. **Password Hashing:** `PASSWORD_BCRYPT` with automatic salt generation.
+2. **SQL Injection Prevention:** 100% usage of parameterized statements via `sqlsrv`.
+3. **Data Integrity:** `CHECK` constraints on all enum strings (`status`, `role`, `level`) preventing bad data at the database level.
 
-### Dashboard
-
-| Client View | Developer View |
-|---|---|
-| ![Client Dashboard](imgs/dashboard%20-%20client.png) | ![Developer Dashboard](imgs/dashboarad%20-%20dev.png) |
-| Clients see projects they posted with status badges and an "Enter Workspace" action. | Developers see projects they've applied to or been hired for, with application status tracking. |
-
-### Workspace
-
-| Client View | Developer View |
-|---|---|
-| ![Client Workspace](imgs/Worksapce-%20client.png) | ![Developer Workspace](imgs/workspace%20-%20developer.png) |
-| Clients can view task progress and communicate via chat. | Developers manage the Kanban board (add/move/delete tasks) and respond in real-time chat. |
-
-### Profile Settings
-
-| Client View | Developer View |
-|---|---|
-| ![Client Settings](imgs/update%20-%20client.png) | ![Developer Settings](imgs/update%20-%20dev.png) |
-| Clients can update company name and contact details. Email is immutable. | Developers can update their full profile: name, skills, level, hourly rate, bio, and social links. |
-
-### Account Deletion
-
-![Delete Account](imgs/delete%20account%20%5Bclient%20-%20dev%20%5D.png)
-
-Both roles can delete their account from the Danger Zone. Password verification is required, and the system blocks deletion if the user has active project connections.
-
----
-
-## Tech Stack
-
-| Layer | Technology | Notes |
+### 5.2 Identified Gaps (Future Roadmap)
+| Issue | Severity | Recommended Mitigation |
 |---|---|---|
-| **Frontend** | HTML5, CSS3 (custom properties), Vanilla JS | No frameworks. Single `script.js` handles all routing, API calls, and UI rendering. |
-| **Styling** | CSS Grid, Flexbox, CSS Variables | Responsive design with a custom design system (`--primary`, `--accent`, `--bg-card`, etc.). |
-| **Backend** | PHP 8.x | RESTful JSON API using `sqlsrv` extension. Session-based auth with `$_SESSION`. |
-| **Database** | SQL Server 2019+ (Express) | 9 normalized tables, CHECK constraints, cascading FKs, non-clustered indexes. |
-| **Auth** | bcrypt (`password_hash` / `password_verify`) | Industry-standard password hashing. Sessions managed server-side. |
-| **Server** | XAMPP (Apache) | Local development stack. PHP connects via `sqlsrv` driver with SQL Server Auth. |
+| **No CSRF Protection** | High | Implement anti-CSRF tokens in all POST forms |
+| **XSS via innerHTML** | High | Replace `innerHTML` with `textContent` or sanitize output |
+| **No Rate Limiting** | High | Add exponential backoff to the login endpoint |
 
 ---
 
-## Installation & Setup
+## 6. Setup & Installation
 
-### Prerequisites
-
-- **XAMPP** (Apache + PHP 8.x)
-- **SQL Server 2019+ Express** with `SQLEXPRESS01` instance
-- **PHP SQL Server Drivers** (`php_sqlsrv` and `php_pdo_sqlsrv` DLLs in `ext/`)
-
-### Step 1: Database
-
-Open SQL Server Management Studio and execute:
-
-```sql
--- Run the complete schema file
--- This creates the database, login, tables, constraints, and seed data
-database/schema.sql
-```
-
-### Step 2: Configure Connection
-
-Edit `api/db_connect.php` if your SQL Server instance name differs:
-
-```php
-$serverName   = ".\\SQLEXPRESS01";   // Change to your instance
-$databaseName = "ProjectEngineDB";
-```
-
-### Step 3: Deploy
-
-Copy the project folder into your XAMPP `htdocs/` directory:
-
-```
-C:\xampp\htdocs\ProjectEngine\
-```
-
-### Step 4: Launch
-
-Start Apache in XAMPP and navigate to:
-
-```
-http://localhost/ProjectEngine/
-```
-
----
-
-## API Reference
-
-All endpoints return `Content-Type: application/json`. Authentication is via PHP sessions (`$_SESSION['user_id']`).
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/register.php` | — | Create a new Client or Developer account |
-| `POST` | `/api/login.php` | — | Authenticate and establish session |
-| `POST` | `/api/logout.php` | ✓ | Destroy session |
-| `GET` | `/api/get_developers.php` | — | List all developers with skills |
-| `GET` | `/api/get_profile.php?id=X` | — | Get single developer profile |
-| `GET` | `/api/get_projects.php` | ✓ | Get user's projects (role-aware) |
-| `POST` | `/api/post_project.php` | Client | Create a new project |
-| `POST` | `/api/apply_project.php` | Dev | Apply to a pending project |
-| `POST` | `/api/hire_developer.php` | Client | Send hire request to developer |
-| `POST` | `/api/review_application.php` | Client | Accept or reject an application |
-| `POST` | `/api/respond_hire.php` | Dev | Accept or reject a hire request |
-| `GET` | `/api/get_workspace.php?id=X` | ✓ | Load workspace data (project + tasks) |
-| `POST` | `/api/add_task.php` | ✓ | Create a Kanban task |
-| `POST` | `/api/move_task.php` | ✓ | Change task status |
-| `POST` | `/api/delete_task.php` | Dev | Remove a task |
-| `GET` | `/api/get_messages.php?id=X` | ✓ | Fetch chat messages for a project |
-| `POST` | `/api/send_message.php` | ✓ | Send a chat message |
-| `GET` | `/api/get_my_profile.php` | ✓ | Get current user's profile for settings |
-| `POST` | `/api/update_profile.php` | ✓ | Update current user's profile |
-| `POST` | `/api/delete_account.php` | ✓ | Delete account (password required) |
-
----
-
-## Project Structure
-
-```
-ProjectEngine/
-├── index.html              # Landing page (hero + how it works + levels)
-├── register.html           # Registration form (Client / Developer toggle)
-├── login.html              # Login form
-├── dashboard.html          # Role-aware project dashboard
-├── developers.html         # Developer discovery with level filtering
-├── profile.html            # Dynamic developer profile page
-├── workspace.html          # Kanban board + real-time chat
-├── post-project.html       # Project creation form (Client only)
-├── settings.html           # Profile update + account deletion
-├── script.js               # Core application logic (routing, API, UI)
-├── style.css               # Design system (variables, components, layouts)
-│
-├── api/
-│   ├── db_connect.php      # SQL Server connection config
-│   ├── register.php        # User registration (transaction-based)
-│   ├── login.php           # Authentication + session setup
-│   ├── logout.php          # Session destruction
-│   ├── get_developers.php  # Developer listing with skills
-│   ├── get_profile.php     # Single developer profile
-│   ├── get_projects.php    # Dashboard project list (role-aware)
-│   ├── post_project.php    # Project creation
-│   ├── apply_project.php   # Developer application
-│   ├── hire_developer.php  # Client hire request
-│   ├── review_application.php  # Accept/reject applications
-│   ├── respond_hire.php    # Developer response to hire
-│   ├── get_workspace.php   # Workspace data loader
-│   ├── add_task.php        # Kanban task creation
-│   ├── move_task.php       # Task status transition
-│   ├── delete_task.php     # Task removal
-│   ├── get_messages.php    # Chat message retrieval
-│   ├── send_message.php    # Chat message insertion
-│   ├── get_my_profile.php  # Current user profile (settings)
-│   ├── update_profile.php  # Profile update handler
-│   └── delete_account.php  # Account deletion (with safety checks)
-│
-├── database/
-│   └── schema.sql          # Complete DB setup (tables + constraints + seeds)
-│
-└── imgs/                   # UI screenshots for documentation
-```
-
----
-
-<div align="center">
-<sub>Built with purpose. No frameworks, no bloat — just clean architecture.</sub>
-</div>
+1. Install **XAMPP** (PHP 8.x) and **SQL Server 2019 Express**.
+2. Install the **PHP sqlsrv extension** (ODBC Driver 17).
+3. Execute `database/schema.sql` in SQL Server Management Studio.
+4. Update `api/db_connect.php` with your `.\SQLEXPRESS01` credentials.
+5. Launch via `http://localhost/ProjectEngine/index.html`.
