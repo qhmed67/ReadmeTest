@@ -6,8 +6,8 @@ Welcome to the comprehensive technical documentation for **ProjectEngine**, a fu
 
 ### 📥 Download Original PDFs
 <div align="center" style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
-  <a href="../Documentation/ProjectEngine_Technical_Documentation.pdf" target="_blank">
-    <img src="../imgs/Documentation.png" width="250" alt="Technical Documentation" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+  <a href="../ProjectEngine_Technical_Documentation.pdf" target="_blank">
+    <img src="../Documentation.png" width="250" alt="Technical Documentation" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
     <h4 style="margin-top: 15px;">📄 Technical Documentation</h4>
   </a>
 
