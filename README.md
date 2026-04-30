@@ -103,63 +103,16 @@ The Context Diagram treats the entire platform as a single process, establishing
 #### 2. DFD Level 0
 Level 0 breaks down Process 0.0 into its primary functional subsystems. To keep this level clean, all data is routed to a single central database store.
 
-```mermaid
-flowchart TB
-    C[Client]
-    D[Developer]
+<p align="center">
+  <img src="DFD%20LEVEL0.jpg" alt="DFD Level 0">
+</p>
 
-    P1[[1.0 Manage Identity]]
-    P2[[2.0 Manage Projects]]
-    P3[[3.0 Manage Workspace]]
+#### 3. DFD Level 1 (Decomposition of Manage Projects)
+Level 1 takes a single Level 0 process and decomposes it to a highly complex, granular level, exposing exact database tables and state changes.
 
-    DB[(D1: Central Database)]
-
-    C -- "Auth / Profile" --> P1
-    C -- "Post / Hire" --> P2
-    C -- "Chat / Tasks" --> P3
-
-    D -- "Auth / Skills" --> P1
-    D -- "Apply to Jobs" --> P2
-    D -- "Chat / Tasks" --> P3
-
-    P1 <--> DB
-    P2 <--> DB
-    P3 <--> DB
-```
-
-#### 3. DFD Level 1 (Decomposition of 2.0 Manage Projects)
-Level 1 takes a single Level 0 process (Process 2.0) and decomposes it to a highly complex, granular level, exposing exact database tables and state changes.
-
-```mermaid
-flowchart TB
-    C[Client]
-    D[Developer]
-
-    P21[[2.1 Validate & Post Project]]
-    P22[[2.2 Process Application]]
-    P23[[2.3 Client Review Phase]]
-    P24[[2.4 Finalize Dev Booking]]
-
-    D2A[(D2a: Projects Table)]
-    D2B[(D2b: Applications Table)]
-    D2C[(D2c: Developers Table)]
-
-    C -- "Project Form Data" --> P21
-    P21 -- "Insert New Project (Status: Pending)" --> D2A
-
-    D -- "Application Request" --> P22
-    D2A -. "Read: Verify Project is Pending" .-> P22
-    D2C -. "Read: Verify Dev is not booked" .-> P22
-    P22 -- "Insert App (Status: Applied)" --> D2B
-
-    C -- "Accept / Reject Decision" --> P23
-    D2B -. "Read: Pending Apps" .-> P23
-    P23 -- "Update App (Status: Accepted)" --> D2B
-    P23 -- "Trigger Hire Event" --> P24
-    
-    P24 -- "Update Project (Status: Active)" --> D2A
-    P24 -- "Update Dev (is_booked = 1)" --> D2C
-```
+<p align="center">
+  <img src="DFD%20LVL%201.jpg" alt="DFD Level 1">
+</p>
 
 ---
 
