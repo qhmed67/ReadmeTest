@@ -164,7 +164,7 @@ flowchart TB
 The conceptual model abstracts the system into real-world entities and relationships, demonstrating the core ISA inheritance pattern and Many-to-Many associations before they are translated into database tables.
 
 <p align="center">
-  <img src="Diagrams/ERD.jpg" alt="Chen's Notation ERD">
+  <img src="ERD.jpg" alt="Chen's Notation ERD">
 </p>
 
 ### 2. Physical Schema (Crow's Foot)
