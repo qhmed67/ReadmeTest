@@ -103,7 +103,8 @@ flowchart LR
     Dev[Developer]
 
     Client -. "+Project Details\n+Hire Requests\n-Developer Profiles\n-Dashboard Stats" .-> Sys
-    Sys -. "+Profile Data\n+Applications\n-Job Listings\n-Workspace Status" .-> Dev
+    Sys ~~~ Dev
+    Dev -. "+Profile Data\n+Applications\n-Job Listings\n-Workspace Status" .-> Sys
 ```
 
 #### 2. DFD Level 0
