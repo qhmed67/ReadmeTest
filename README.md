@@ -107,7 +107,7 @@ Level 0 breaks down Process 0.0 into its primary functional subsystems. To keep 
   <img src="DFD%20LEVEL0.jpg" alt="DFD Level 0">
 </p>
 
-#### 3. DFD Level 1 (Decomposition of Manage Projects)
+#### 3. DFD Level 1
 Level 1 takes a single Level 0 process and decomposes it to a highly complex, granular level, exposing exact database tables and state changes.
 
 <p align="center">
@@ -118,19 +118,23 @@ Level 1 takes a single Level 0 process and decomposes it to a highly complex, gr
 
 ## Database Schema (ERD)
 
-### 1. Conceptual Model (Chen's Notation)
+### 1. Conceptual Model
 The conceptual model abstracts the system into real-world entities and relationships, demonstrating the core ISA inheritance pattern and Many-to-Many associations before they are translated into database tables.
 
 <p align="center">
   <img src="ERD.jpg" alt="Chen's Notation ERD">
 </p>
 
-### 2. Physical Schema (Crow's Foot)
+### 2. Physical Schema
 The physical database uses **9 normalized tables** with enforced referential integrity. The conceptual Many-to-Many relationships are resolved using junction tables (`Project_Applications`, `Developer_Skills`). Users is the central identity table; Clients and Developers are ISA subtypes linked via shared primary keys.
 
 <p align="center">
   <img src="ERD-Schema.jpg" alt="Physical Schema ERD">
 </p>
+
+---
+
+#### Technical ERD Code (Mermaid)
 
 ```mermaid
 erDiagram
