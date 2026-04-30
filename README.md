@@ -91,13 +91,13 @@ flowchart TB
 
 ### Data Flow Diagrams (DFD)
 
-Data Flow Diagrams illustrate how information routes through the system's processes and databases.
+Data Flow Diagrams illustrate how information routes through the system's processes and databases. This is vital for understanding system boundaries and data persistence.
 
 #### 1. Context Diagram
 The Context Diagram treats the entire platform as a single process, establishing the system boundary and identifying external entities.
 
 <p align="center">
-  <img src="context_diagram.png" alt="Context Diagram (DFD Level 0)">
+  <img src="Context%20Diagram.png" alt="Context Diagram">
 </p>
 
 #### 2. DFD Level 0
