@@ -96,16 +96,9 @@ Data Flow Diagrams illustrate how information routes through the system's proces
 #### 1. Context Diagram
 The Context Diagram treats the entire platform as a single process, establishing the system boundary and identifying external entities.
 
-```mermaid
-flowchart LR
-    Client[Client]
-    Sys((0.0 ProjectEngine Platform))
-    Dev[Developer]
-
-    Client -. "+Project Details\n+Hire Requests\n-Developer Profiles\n-Dashboard Stats" .-> Sys
-    Sys ~~~ Dev
-    Dev -. "+Profile Data\n+Applications\n-Job Listings\n-Workspace Status" .-> Sys
-```
+<p align="center">
+  <img src="context_diagram.png" alt="Context Diagram (DFD Level 0)">
+</p>
 
 #### 2. DFD Level 0
 Level 0 breaks down Process 0.0 into its primary functional subsystems and introduces the main data stores.
