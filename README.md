@@ -160,7 +160,15 @@ flowchart TB
 
 ## Database Schema (ERD)
 
-The database uses **9 normalized tables** with enforced referential integrity. Users is the central identity table; Clients and Developers are ISA subtypes linked via shared primary keys.
+### 1. Conceptual Model (Chen's Notation)
+The conceptual model abstracts the system into real-world entities and relationships, demonstrating the core ISA inheritance pattern and Many-to-Many associations before they are translated into database tables.
+
+<p align="center">
+  <img src="Diagrams/ERD.jpg" alt="Chen's Notation ERD">
+</p>
+
+### 2. Physical Schema (Crow's Foot)
+The physical database uses **9 normalized tables** with enforced referential integrity. The conceptual Many-to-Many relationships are resolved using junction tables (`Project_Applications`, `Developer_Skills`). Users is the central identity table; Clients and Developers are ISA subtypes linked via shared primary keys.
 
 ```mermaid
 erDiagram
