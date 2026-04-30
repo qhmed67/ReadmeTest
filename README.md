@@ -97,16 +97,19 @@ Data Flow Diagrams illustrate how information routes through the system's proces
 The Context Diagram treats the entire platform as a single process, establishing the system boundary and identifying external entities.
 
 ```mermaid
-flowchart LR
+flowchart TB
     Client[Client]
     Dev[Developer]
+    Admin[Administrator]
+    Payment[Payment Gateway]
+    Email[Email Server]
     Sys((0.0 ProjectEngine Platform))
 
-    Client -- "Project Details, Auth, Chat" --> Sys
-    Sys -- "Dashboard, Dev Profiles" --> Client
-
-    Dev -- "Profile Data, Applications" --> Sys
-    Sys -- "Job Listings, Workspaces" --> Dev
+    Client -. "+Project Details\n-Dev Profiles" .-> Sys
+    Dev -. "+Profile Data\n-Job Listings" .-> Sys
+    Sys -. "+Config Rules\n-System Reports" .-> Admin
+    Sys -. "+Transaction Status\n-Payment Requests" .-> Payment
+    Sys -. "+Delivery Confirm\n-Email Content" .-> Email
 ```
 
 #### 2. DFD Level 0
