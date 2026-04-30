@@ -128,6 +128,10 @@ The conceptual model abstracts the system into real-world entities and relations
 ### 2. Physical Schema (Crow's Foot)
 The physical database uses **9 normalized tables** with enforced referential integrity. The conceptual Many-to-Many relationships are resolved using junction tables (`Project_Applications`, `Developer_Skills`). Users is the central identity table; Clients and Developers are ISA subtypes linked via shared primary keys.
 
+<p align="center">
+  <img src="ERD-Schema.jpg" alt="Physical Schema ERD">
+</p>
+
 ```mermaid
 erDiagram
     Users ||--o| Clients : "role = Client"
