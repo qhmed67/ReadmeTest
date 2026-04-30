@@ -100,7 +100,7 @@ The Context Diagram treats the entire platform as a single process, establishing
 flowchart LR
     Client[Client]
     Dev[Developer]
-    Sys[[0.0 ProjectEngine Platform]]
+    Sys((0.0 ProjectEngine Platform))
 
     Client -- "Project Details, Auth, Chat" --> Sys
     Sys -- "Dashboard, Dev Profiles" --> Client
