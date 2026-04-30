@@ -91,10 +91,10 @@ flowchart TB
 
 ### Data Flow Diagrams (DFD)
 
-Data Flow Diagrams illustrate how information routes through the system's processes and databases. This is vital for understanding system boundaries and data persistence.
+Data Flow Diagrams illustrate how information routes through the system's processes and databases.
 
-#### DFD Level 0 (Context Diagram)
-The Context Diagram treats the entire platform as a single process, showing the primary inputs and outputs from our external entities.
+#### 1. Context Diagram
+The Context Diagram treats the entire platform as a single process, establishing the system boundary and identifying external entities.
 
 ```mermaid
 flowchart LR
@@ -102,50 +102,67 @@ flowchart LR
     Dev[Developer]
     Sys((0.0 ProjectEngine Platform))
 
-    Client -- "Account Info, Project Details, Messages" --> Sys
-    Sys -- "Dashboard Views, Dev Profiles, Workspace State" --> Client
+    Client -- "Project Details, Auth, Chat" --> Sys
+    Sys -- "Dashboard, Dev Profiles" --> Client
 
-    Dev -- "Profile Data, Applications, Task Updates" --> Sys
-    Sys -- "Job Listings, Hire Approvals, Workspace State" --> Dev
+    Dev -- "Profile Data, Applications" --> Sys
+    Sys -- "Job Listings, Workspaces" --> Dev
 ```
 
-#### DFD Level 1 (Process Decomposition)
-Level 1 breaks the main system down into its core subsystems (Identity, Projects, Workspace) and shows how they interact with specific database tables.
+#### 2. DFD Level 0
+Level 0 breaks down Process 0.0 into its primary functional subsystems and introduces the main data stores.
 
 ```mermaid
 flowchart TB
-    %% External Entities
     C[Client]
     D[Developer]
 
-    %% Processes
     P1((1.0 Manage Identity))
     P2((2.0 Manage Projects))
-    P3((3.0 Workspace Sync))
+    P3((3.0 Manage Workspace))
 
-    %% Data Stores
-    D1[(D1: Auth & Profiles)]
+    D1[(D1: Users & Profiles)]
     D2[(D2: Projects & Apps)]
     D3[(D3: Tasks & Chat)]
 
-    %% Entity to Process Flows
-    C -- "Login / Profile Updates" --> P1
-    C -- "Post Project / Review Apps" --> P2
-    C -- "Read Tasks / Send Chat" --> P3
+    C -- "Auth / Profile Updates" --> P1
+    C -- "Post Project / Hire" --> P2
+    C -- "Read Tasks / Chat" --> P3
 
-    D -- "Login / Skill Updates" --> P1
+    D -- "Auth / Skill Updates" --> P1
     D -- "Apply to Project" --> P2
-    D -- "Move Tasks / Send Chat" --> P3
+    D -- "Move Tasks / Chat" --> P3
 
-    %% Process to Data Store Flows
-    P1 <--> |"Verify / Save Users"| D1
-    P2 <--> |"Save / Read Projects"| D2
-    P3 <--> |"Save / Read Board"| D3
+    P1 <--> D1
+    P2 <--> D2
+    P3 <--> D3
+```
 
-    %% Cross-Process Communication
-    P1 -. "Auth Token" .-> P2
-    P1 -. "Auth Token" .-> P3
-    P2 -. "Active Project Auth" .-> P3
+#### 3. DFD Level 1 (Decomposition of 2.0 Manage Projects)
+Level 1 takes a single Level 0 process (Process 2.0) and decomposes it further to show exactly how data flows at a granular level.
+
+```mermaid
+flowchart TB
+    C[Client]
+    D[Developer]
+
+    P21((2.1 Post New Project))
+    P22((2.2 Submit Application))
+    P23((2.3 Review Application))
+
+    D2A[(D2a: Projects Table)]
+    D2B[(D2b: Applications Table)]
+
+    C -- "Project Form Data" --> P21
+    P21 -- "Insert New Project" --> D2A
+
+    D -- "Application Request" --> P22
+    P22 -- "Insert Application" --> D2B
+    D2A -. "Verify Project Exists" .-> P22
+
+    C -- "Accept / Reject Action" --> P23
+    P23 -- "Update App Status" --> D2B
+    P23 -- "Update Project to Active" --> D2A
 ```
 
 ---
