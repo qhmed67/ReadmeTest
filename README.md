@@ -104,14 +104,14 @@ The Context Diagram treats the entire platform as a single process, establishing
 Level 0 breaks down Process 0.0 into its primary functional subsystems. To keep this level clean, all data is routed to a single central database store.
 
 <p align="center">
-  <img src="Diagrams/DFD%20LEVEL0.jpg" alt="DFD Level 0">
+  <img src="DFD%20LEVEL0.jpg" alt="DFD Level 0">
 </p>
 
 #### 3. DFD Level 1 (Decomposition of Manage Projects)
 Level 1 takes a single Level 0 process and decomposes it to a highly complex, granular level, exposing exact database tables and state changes.
 
 <p align="center">
-  <img src="Diagrams/DFD%20LVL%201.jpg" alt="DFD Level 1">
+  <img src="DFD%20LVL%201.jpg" alt="DFD Level 1">
 </p>
 
 ---
@@ -122,7 +122,7 @@ Level 1 takes a single Level 0 process and decomposes it to a highly complex, gr
 The conceptual model abstracts the system into real-world entities and relationships, demonstrating the core ISA inheritance pattern and Many-to-Many associations before they are translated into database tables.
 
 <p align="center">
-  <img src="Diagrams/ERD.jpg" alt="Chen's Notation ERD">
+  <img src="ERD.jpg" alt="Chen's Notation ERD">
 </p>
 
 ### 2. Physical Schema (Crow's Foot)
