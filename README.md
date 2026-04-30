@@ -100,7 +100,7 @@ The Context Diagram treats the entire platform as a single process, establishing
 flowchart LR
     Client[Client]
     Dev[Developer]
-    Sys((0.0 ProjectEngine Platform))
+    Sys[[0.0 ProjectEngine Platform]]
 
     Client -- "Project Details, Auth, Chat" --> Sys
     Sys -- "Dashboard, Dev Profiles" --> Client
@@ -117,9 +117,9 @@ flowchart TB
     C[Client]
     D[Developer]
 
-    P1((1.0 Manage Identity))
-    P2((2.0 Manage Projects))
-    P3((3.0 Manage Workspace))
+    P1[[1.0 Manage Identity]]
+    P2[[2.0 Manage Projects]]
+    P3[[3.0 Manage Workspace]]
 
     D1[(D1: Users & Profiles)]
     D2[(D2: Projects & Apps)]
@@ -146,9 +146,9 @@ flowchart TB
     C[Client]
     D[Developer]
 
-    P21((2.1 Post New Project))
-    P22((2.2 Submit Application))
-    P23((2.3 Review Application))
+    P21[[2.1 Post New Project]]
+    P22[[2.2 Submit Application]]
+    P23[[2.3 Review Application]]
 
     D2A[(D2a: Projects Table)]
     D2B[(D2b: Applications Table)]
