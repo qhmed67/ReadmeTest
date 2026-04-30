@@ -101,7 +101,7 @@ The Context Diagram treats the entire platform as a single process, establishing
 </p>
 
 #### 2. DFD Level 0
-Level 0 breaks down Process 0.0 into its primary functional subsystems and introduces the main data stores.
+Level 0 breaks down Process 0.0 into its primary functional subsystems. To keep this level clean, all data is routed to a single central database store.
 
 ```mermaid
 flowchart TB
@@ -112,48 +112,53 @@ flowchart TB
     P2[[2.0 Manage Projects]]
     P3[[3.0 Manage Workspace]]
 
-    D1[(D1: Users & Profiles)]
-    D2[(D2: Projects & Apps)]
-    D3[(D3: Tasks & Chat)]
+    DB[(D1: Central Database)]
 
-    C -- "Auth / Profile Updates" --> P1
-    C -- "Post Project / Hire" --> P2
-    C -- "Read Tasks / Chat" --> P3
+    C -- "Auth / Profile" --> P1
+    C -- "Post / Hire" --> P2
+    C -- "Chat / Tasks" --> P3
 
-    D -- "Auth / Skill Updates" --> P1
-    D -- "Apply to Project" --> P2
-    D -- "Move Tasks / Chat" --> P3
+    D -- "Auth / Skills" --> P1
+    D -- "Apply to Jobs" --> P2
+    D -- "Chat / Tasks" --> P3
 
-    P1 <--> D1
-    P2 <--> D2
-    P3 <--> D3
+    P1 <--> DB
+    P2 <--> DB
+    P3 <--> DB
 ```
 
 #### 3. DFD Level 1 (Decomposition of 2.0 Manage Projects)
-Level 1 takes a single Level 0 process (Process 2.0) and decomposes it further to show exactly how data flows at a granular level.
+Level 1 takes a single Level 0 process (Process 2.0) and decomposes it to a highly complex, granular level, exposing exact database tables and state changes.
 
 ```mermaid
 flowchart TB
     C[Client]
     D[Developer]
 
-    P21[[2.1 Post New Project]]
-    P22[[2.2 Submit Application]]
-    P23[[2.3 Review Application]]
+    P21[[2.1 Validate & Post Project]]
+    P22[[2.2 Process Application]]
+    P23[[2.3 Client Review Phase]]
+    P24[[2.4 Finalize Dev Booking]]
 
     D2A[(D2a: Projects Table)]
     D2B[(D2b: Applications Table)]
+    D2C[(D2c: Developers Table)]
 
     C -- "Project Form Data" --> P21
-    P21 -- "Insert New Project" --> D2A
+    P21 -- "Insert New Project (Status: Pending)" --> D2A
 
     D -- "Application Request" --> P22
-    P22 -- "Insert Application" --> D2B
-    D2A -. "Verify Project Exists" .-> P22
+    D2A -. "Read: Verify Project is Pending" .-> P22
+    D2C -. "Read: Verify Dev is not booked" .-> P22
+    P22 -- "Insert App (Status: Applied)" --> D2B
 
-    C -- "Accept / Reject Action" --> P23
-    P23 -- "Update App Status" --> D2B
-    P23 -- "Update Project to Active" --> D2A
+    C -- "Accept / Reject Decision" --> P23
+    D2B -. "Read: Pending Apps" .-> P23
+    P23 -- "Update App (Status: Accepted)" --> D2B
+    P23 -- "Trigger Hire Event" --> P24
+    
+    P24 -- "Update Project (Status: Active)" --> D2A
+    P24 -- "Update Dev (is_booked = 1)" --> D2C
 ```
 
 ---
